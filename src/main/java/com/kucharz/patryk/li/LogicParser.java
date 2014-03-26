@@ -1,13 +1,17 @@
 package com.kucharz.patryk.li;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class LogicParser
 {
 	private static LogicParser instance;
 	
-	static
-	{
-		String[][] tabLawOfLogic = new String[2][2];
-	}
+
+		static String[][] tabLawOfLogic =
+		{
+				{"\\([p-w]=>[p-w]\\)", "~*;*"}
+		};
 	
 	protected LogicParser()
 	{
@@ -70,8 +74,6 @@ public class LogicParser
 			else if(logicSentence.charAt(i) == ')')
 				tmp -= 1;
 			
-			System.out.println("Tmp: "+ tmp + " char:" + logicSentence.charAt(i));
-			
 			if(tmp == 0)
 				return logicSentence;
 			
@@ -81,5 +83,19 @@ public class LogicParser
 		//Zwracamy zdanie bez nawiasów zewnętrznych
 		return logicSentence = logicSentence.substring(1, logicSentence.length()-1);
 		
+	}
+	
+	private String simplifyLogic(String logicSentence)
+	{
+		String result = logicSentence;
+		
+		for(int i = 0; i < tabLawOfLogic.length; i++)
+		{
+			Pattern pat = Pattern.compile(tabLawOfLogic[i][0]);
+			Matcher mat = pat.matcher(logicSentence);
+			
+		}
+		
+		return result;
 	}
 }
