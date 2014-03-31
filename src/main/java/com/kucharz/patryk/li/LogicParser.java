@@ -166,12 +166,14 @@ public class LogicParser
 		int[] sentence = new int[logicSentence.length()];
 		int value = 0, highest = 0;
 		
+		//Przeliczamy string, aby wiedziec w ktorym miejscu sa nawiasy i co obejmuja
 		for (int i = 0; i < logicSentence.length(); i++)
 		{
 			if (logicSentence.charAt(i) == '(')
 			{
 				value++;
-			} else if (logicSentence.charAt(i) == ')')
+			} 
+			else if (logicSentence.charAt(i) == ')')
 			{
 				value--;
 			}
@@ -182,53 +184,7 @@ public class LogicParser
 			sentence[i] = value;
 		}
 		
-		for(int i = 0; i <= highest; i++)
-		{
-			// ((p=>q)^(r=>q))=>~(p^~q)
-			Iterator<String> iter = mapLawOfLogic.keySet().iterator();
-			System.out.println("keySetLength " + mapLawOfLogic.keySet().size() );
-			while(iter.hasNext())
-			{
-				System.out.println("hasNext()1 " + iter.hasNext());
-				String sign = iter.next();
-				System.out.println("sign " + sign);
-				System.out.println("hasNext()2 " + iter.hasNext());
-				int index = logicSentence.indexOf(sign);
-				System.out.println("index " + index);
-				if( index != -1)
-				{
-					System.out.println("iter: " + sign + ", sentence[]:" +  sentence[index]);
-					
-					if(sentence[index] == i)
-					{
-						String[] law = mapLawOfLogic.get(sign);
-						Pattern pat = Pattern.compile(law[0]);
-						System.out.println("law[0] = " + law[0]);
-						Matcher mat = pat.matcher(logicSentence);
-						LinkedList<String> matches = new LinkedList<String>();
-						while (mat.find())
-						{
-							String tmp = mat.group();
-							matches.add(tmp);
-						}
-
-						if (matches.size() > 0)
-						{
-							int max = findTheLongestString(matches);
-							result = transformStringWithLogicLaw(matches.get(max),
-									law);
-							result = logicSentence.replace(matches.get(max), result);
-							System.out.println("result: " + result);
-							return result;
-						}
-						
-					}
-				}
-				
-			}
-		}
 		
-		return result;
 	}
 
 	// Poszukiwanie najdłuższego stringu

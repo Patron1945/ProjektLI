@@ -56,16 +56,20 @@ public class Gui extends JFrame
 				}
 				else
 				{
-					String result = "Blad";
+					Boolean result = false;
 					try
 					{
-						result = LogicParser.getInstance().parse(m_textField.getText());
+						result = LogicResolver.getInstance().resolve(m_textField.getText());
+						
 					} catch (Exception e)
 					{
 						m_textField.setText(e.getMessage());
 					}
 					
-					m_textField.setText(result);
+					if(result)
+						m_textField.setText("To jest tautologia");
+					else
+						m_textField.setText("To nie jest tautologia");
 				}
 			}
 		});
