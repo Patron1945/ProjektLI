@@ -56,14 +56,16 @@ public class Gui extends JFrame
 				}
 				else
 				{
-					
+					String result = "Blad";
 					try
 					{
-						LogicParser.getInstance().parse(m_textField.getText());
+						result = LogicParser.getInstance().parse(m_textField.getText());
 					} catch (Exception e)
 					{
 						m_textField.setText(e.getMessage());
 					}
+					
+					m_textField.setText(result);
 				}
 			}
 		});
