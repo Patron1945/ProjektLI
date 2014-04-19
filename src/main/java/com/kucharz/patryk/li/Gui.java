@@ -25,7 +25,7 @@ public class Gui extends JFrame
 	Gui()
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(new Dimension(500, 100));
+		setSize(new Dimension(550, 100));
 
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.CENTER);
@@ -34,9 +34,13 @@ public class Gui extends JFrame
 		m_textField = new JTextField();
 		m_textField.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent arg0) 
+			public void mousePressed(MouseEvent arg0)
 			{
-				m_textField.setText("");
+				if (arg0.getClickCount() == 2)
+				{
+					m_textField.setText("");
+				}
+
 			}
 		});
 		m_textField.setBounds(10, 6, 375, 45);
@@ -46,38 +50,40 @@ public class Gui extends JFrame
 		m_textField.setColumns(10);
 
 		JButton m_checkBtn = new JButton("Sprawdz");
-		m_checkBtn.addActionListener(new ActionListener()
-		{
+		m_checkBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0)
 			{
-				if(m_textField.getText().contains("help"))
+
+				int result = -1;
+				try
 				{
-					
+					result = LogicResolver.getInstance().resolve(m_textField.getText());
 				}
-				else
+				catch (Exception e)
 				{
-					Boolean result = false;
-					try
-					{
-						result = LogicResolver.getInstance().resolve(m_textField.getText());
-						
-					} catch (Exception e)
-					{
-						m_textField.setText(e.getMessage());
-					}
-					
-					if(result)
-						m_textField.setText("To jest tautologia");
-					else
-						m_textField.setText("To nie jest tautologia");
+					m_textField.setText(e.getMessage());
 				}
+
+				if (result == 0)
+					m_textField.setText("Tautologia");
+				else if(result == 1)
+					m_textField.setText("Tautologia spełnialna");
+				else if(result == 2)
+					m_textField.setText("Tautologia niespełnialna");
+
 			}
 		});
-		m_checkBtn.setBounds(395, 6, 79, 45);
+		m_checkBtn.setBounds(395, 6, 129, 45);
 		m_checkBtn.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		panel.add(m_checkBtn);
 
 		this.setVisible(true);
+
+	}
+	
+	public static void main(String[] args)
+	{
+		Gui gui = new Gui();
 
 	}
 
